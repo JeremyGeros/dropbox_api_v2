@@ -2,7 +2,7 @@ module DropboxApiV2::Endpoints::Files
   class GetThumbnail < DropboxApiV2::Endpoints::ContentDownload
     Method      = :post
     Path        = "/2/files/get_thumbnail".freeze
-    ResultType  = DropboxApiV2::Metadata::File
+    ResultType  = DropboxApiV2::Metadata::ImageAndFile
     ErrorType   = DropboxApiV2::Errors::PreviewError
 
     # @method get_thumbnail(path, options = {})
@@ -24,9 +24,9 @@ module DropboxApiV2::Endpoints::Files
       options[:format] ||= :jpeg
       options[:size] ||= :w64h64
 
-      perform_request(options.merge({
+      perform_request(nil, "Dropbox-API-Arg" => options.merge({
         :path => path
-      }))
+      }).to_json)
     end
 
     private

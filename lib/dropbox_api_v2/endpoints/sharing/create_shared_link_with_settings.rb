@@ -17,7 +17,7 @@ module DropboxApiV2::Endpoints::Sharing
     add_endpoint :create_shared_link_with_settings do |path, settings = {}|
       # NOTE: This endpoint accepts an additional option `settings` which
       #       hasn't been implemented.
-      perform_request :path => path
+      perform_request :path => path, settings: settings
     end
   end
 end

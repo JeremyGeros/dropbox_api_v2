@@ -8,8 +8,14 @@ module DropboxApiV2::Endpoints
     protected
 
     def perform_request(params, headers = {})
-      process_response(@connection
-        .run_request(self.class::Method, self.class::Path, params, headers))
+      if params
+        params = (params.empty? ? nil : params).to_json
+        headers.merge!({'Content-Type' => 'application/json'})
+      else
+        headers.merge!({'Content-Type' => ''})
+      end
+
+      process_response(@connection.run_request(self.class::Method, self.class::Path, params, headers))
     end
 
     def process_response(raw_response)
@@ -25,7 +31,6 @@ module DropboxApiV2::Endpoints
 
     def build_result(api_result)
       result_builder = DropboxApiV2::ResultBuilder.new(api_result)
-
       if result_builder.has_error?
         raise result_builder.build_error(self.class::ErrorType)
       else
