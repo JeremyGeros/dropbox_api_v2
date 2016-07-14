@@ -63,7 +63,8 @@ module DropboxApiV2
       else
         given_csrf_token, url_state = state.split('|', 2)
       end
-      if !ActiveSupport::MessageVerifier.secure_compare(csrf_token_from_session, given_csrf_token)
+      
+      if !ActiveSupport::SecurityUtils.secure_compare(csrf_token_from_session, given_csrf_token)
         raise DropboxApiV2::Errors::CsrfError.new("Expected #{csrf_token_from_session.inspect}, " +
                             "got #{given_csrf_token.inspect}.")
       end
