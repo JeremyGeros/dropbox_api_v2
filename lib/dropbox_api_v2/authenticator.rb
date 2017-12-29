@@ -16,7 +16,7 @@ module DropboxApiV2
     end
 
     def authorize_url(url_state)
-      csrf_token = SecureRandom.base64(16)
+      csrf_token = SecureRandom.hex(16)
       @session[:dropbox_auth_csrf_token] = csrf_token
       state = csrf_token
       state += "|" + url_state unless url_state.nil?
