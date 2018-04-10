@@ -19,7 +19,7 @@ module DropboxApiV2
       csrf_token = SecureRandom.hex(16)
       @session[:dropbox_auth_csrf_token] = csrf_token
       state = csrf_token
-      state += "|" + url_state unless url_state.nil?
+      state += "-" + url_state unless url_state.nil?
 
       params = {state: state, redirect_uri: @redirect_uri}
       @session[:dropbox_auth_csrf_token] = csrf_token
@@ -56,12 +56,12 @@ module DropboxApiV2
         raise RuntimeError.new("CSRF token unexpectedly short: #{csrf_token_from_session.inspect}")
       end
 
-      split_pos = state.index('|')
+      split_pos = state.index('-')
       if split_pos.nil?
         given_csrf_token = state
         url_state = nil
       else
-        given_csrf_token, url_state = state.split('|', 2)
+        given_csrf_token, url_state = state.split('-', 2)
       end
       
       if !ActiveSupport::SecurityUtils.secure_compare(csrf_token_from_session, given_csrf_token)
